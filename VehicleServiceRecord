@@ -1,0 +1,85 @@
+package com.vehicle.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "vehicle_service_record")
+public class VehicleServiceRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "vehicle_model")
+    private String vehicleModel;
+
+    @Column(name = "service_date")
+    private LocalDate serviceDate;
+
+    private Integer mileage;
+
+    private Double cost;
+
+    private String response;
+
+    public VehicleServiceRecord() {
+    }
+
+    public VehicleServiceRecord(String vehicleModel, LocalDate serviceDate, int mileage, double cost, String response) {
+        this.vehicleModel = vehicleModel;
+        this.serviceDate = serviceDate;
+        this.mileage = mileage;
+        this.cost = cost;
+        this.response = response;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public LocalDate getServiceDate() {
+        return serviceDate;
+    }
+
+    public void setServiceDate(LocalDate serviceDate) {
+        this.serviceDate = serviceDate;
+    }
+
+    public Integer getMileage() {
+        return mileage;
+    }
+
+    public void setMileage(Integer mileage) {
+        this.mileage = mileage;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+}
