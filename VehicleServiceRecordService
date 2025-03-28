@@ -1,0 +1,56 @@
+package com.vehicle.service;
+
+import com.vehicle.model.VehicleServiceRecord;
+import com.vehicle.repository.VehicleServiceRecordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class VehicleServiceRecordService {
+
+    @Autowired
+    private VehicleServiceRecordRepository repository;
+
+    public List<VehicleServiceRecord> getAllRecords() {
+        return repository.findAll();
+    }
+
+    public Optional<VehicleServiceRecord> getRecordById(Long id) {
+        return repository.findById(id);
+    }
+
+    public VehicleServiceRecord createRecord(String vehicleModel, LocalDate serviceDate, int mileage, double cost, String response) {
+        // Create record object to save the vehicleModel, serviceDate, mileage, cost, and response
+        VehicleServiceRecord record = new VehicleServiceRecord(vehicleModel, serviceDate, mileage, cost, response);
+        return repository.save(record);
+    }
+
+    public VehicleServiceRecord updateRecord(Long id, String vehicleModel, LocalDate serviceDate, int mileage, double cost, String response) {
+        Optional<VehicleServiceRecord> existingNotification = repository.findById(id);
+
+        if (existingNotification.isPresent()) {
+            // Set the required parameters in the given method
+            VehicleServiceRecord record = existingNotification.get();
+            record.setVehicleModel(vehicleModel);
+            record.setServiceDate(serviceDate);
+            record.setMileage(mileage);
+            record.setCost(cost);
+            record.setResponse(response);
+            return repository.save(record);
+        } else {
+            // Handle the case when the record is not found
+            throw new RuntimeException("Record with id " + id + " not found");
+        }
+    }
+
+    public void deleteExistingRecord(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Record with id " + id + " not found");
+        }
+        repository.deleteById(id);
+    }
+}
