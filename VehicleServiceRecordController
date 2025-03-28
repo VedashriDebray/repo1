@@ -1,0 +1,95 @@
+package com.vehicle.controller;
+
+import com.vehicle.model.VehicleServiceRecord;
+import com.vehicle.service.VehicleServiceRecordService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/records")
+public class VehicleServiceRecordController {
+
+    @Autowired
+    private VehicleServiceRecordService service;
+
+    @GetMapping
+    public ResponseEntity<?> getAllRecords() {
+        try {
+            List<VehicleServiceRecord> records = service.getAllRecords();
+            if (records.isEmpty()) {
+                return new ResponseEntity<>("No records found", HttpStatus.OK);
+            }
+            return new ResponseEntity<>(records, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error retrieving records: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRecordById(@PathVariable Long id) {
+        try {
+            Optional<VehicleServiceRecord> record = service.getRecordById(id);
+            if (record.isPresent()) {
+                return new ResponseEntity<>(record.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Record with id " + id + " not found", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error retrieving record: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createRecord(@RequestBody VehicleRecordRequest request) {
+        try {
+            if (request.getVehicleModel() == null || request.getServiceDate() == null || request.getMileage() == null || request.getCost() == null) {
+                return new ResponseEntity<>("Invalid request: All fields are required", HttpStatus.BAD_REQUEST);
+            }
+            VehicleServiceRecord newRecord = service.createRecord(
+                request.getVehicleModel(),
+                request.getServiceDate(),
+                request.getMileage(),
+                request.getCost(),
+                "Vehicle Record created successfully"
+            );
+            return new ResponseEntity<>(newRecord, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error creating record: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRecord(@PathVariable Long id, @RequestBody VehicleRecordRequest request) {
+        try {
+            if (request.getVehicleModel() == null || request.getServiceDate() == null || request.getMileage() == null || request.getCost() == null) {
+                return new ResponseEntity<>("Invalid request: All fields are required", HttpStatus.BAD_REQUEST);
+            }
+            VehicleServiceRecord updatedRecord = service.updateRecord(
+                id,
+                request.getVehicleModel(),
+                request.getServiceDate(),
+                request.getMileage(),
+                request.getCost(),
+                "Vehicle Record updated successfully"
+            );
+            return new ResponseEntity<>(updatedRecord, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error updating record: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteExistingRecord(@PathVariable Long id) {
+        try {
+            service.deleteExistingRecord(id);
+            return new ResponseEntity<>("Vehicle with id " + id + " deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error deleting record: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+}
