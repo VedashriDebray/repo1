@@ -1,0 +1,26 @@
+package com.vehicle.controller;
+
+import java.time.LocalDate;
+
+public class VehicleRecordRequest {
+    private String vehicleModel;
+    private LocalDate serviceDate;
+    private Integer mileage;
+    private Double cost;
+
+    public String getVehicleModel() { return vehicleModel; }
+
+    public void setVehicleModel(String vehicleModel) { this.vehicleModel = vehicleModel; }
+
+    public LocalDate getServiceDate() { return serviceDate; }
+
+    public void setServiceDate(LocalDate serviceDate) { this.serviceDate = serviceDate; }
+
+    public Integer getMileage() { return mileage; }
+
+    public void setMileage(Integer mileage) { this.mileage = mileage; }
+
+    public Double getCost() { return cost; }
+
+    public void setCost(Double cost) { this.cost = cost; }
+}
